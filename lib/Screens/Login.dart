@@ -4,7 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:dio/dio.dart';
 import 'MainScreens.dart';
 import 'package:vigenesia/Constant/const.dart';
-import 'package:vigenesia/Models/Login_Model.dart';
+import '../Models/Login_Model.dart';
 import 'Register.dart';
 import 'package:flutter/gestures.dart';
 
@@ -30,14 +30,12 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
 
   Future<LoginModels?> postLogin(String email, String password) async {
     var dio = Dio();
-    String baseurl = url;
+    String baseurl = "http://localhost/vigenesia2/";
     LoginModels? model;
 
     Map<String, dynamic> data = {"email": email, "password": password};
-    print("https://689b-182-3-43-164.ngrok-free.app/vigenesia/api/login");
     try {
-      final response = await dio.post(
-          "https://689b-182-3-43-164.ngrok-free.app/api/login",
+      final response = await dio.post("$baseurl/api/login",
           data: data,
           options: Options(headers: {'Content-type': 'application/json'}));
 

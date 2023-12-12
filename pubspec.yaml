@@ -4,7 +4,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.2.0 <4.0.0'
+  sdk: '>=3.2.2 <4.0.0'
 
 dependencies:
   flutter:
@@ -15,10 +15,10 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^3.0.1
   cupertino_icons: ^1.0.2
-  dio: ^5.3.4
+  dio: ^5.4.0
   font_awesome_flutter: ^10.6.0
   flutter_svg: ^2.0.9
-  http: ^1.1.0
+  http: ^1.1.2
   curved_navigation_bar: ^1.0.1
   flutter_form_builder: ^9.1.1
   another_flushbar: ^1.10.29

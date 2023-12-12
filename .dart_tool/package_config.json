@@ -57,7 +57,7 @@
     },
     {
       "name": "dio",
-      "rootUri": "file:///C:/Users/prett/AppData/Local/Pub/Cache/hosted/pub.dev/dio-5.3.4",
+      "rootUri": "file:///C:/Users/prett/AppData/Local/Pub/Cache/hosted/pub.dev/dio-5.4.0",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
@@ -105,9 +105,9 @@
     },
     {
       "name": "http",
-      "rootUri": "file:///C:/Users/prett/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.1.0",
+      "rootUri": "file:///C:/Users/prett/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.1.2",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
       "name": "http_parser",
@@ -254,7 +254,7 @@
       "languageVersion": "3.2"
     }
   ],
-  "generated": "2023-11-22T03:56:26.349915Z",
+  "generated": "2023-12-12T08:48:57.686226Z",
   "generator": "pub",
-  "generatorVersion": "3.2.0"
+  "generatorVersion": "3.2.3"
 }

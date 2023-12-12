@@ -1,9 +1,13 @@
 
-import 'package:flutter/material.dart';import 'package:flutter/widgets.dart';import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:dio/dio.dart';
-import 'package:vigenesia/Constant/const.dart';
+import '../Constant/const.dart';
 import 'package:vigenesia/Models/Motivasi_Model.dart';
+import 'dart:convert';
+
+
 
 class EditPage extends StatefulWidget {
   final String? id;
@@ -16,12 +20,12 @@ class EditPage extends StatefulWidget {
 
 class _EditPageState extends State<EditPage> {
   String baseurl =
-      url; // ganti dengan ip address kamu / tempat kamu menyimpan backend
+    "http://localhost/vigenesia2/";
 
   var dio = Dio();
-  Future<dynamic> putPost(String isi_motivasi, String ids) async {
+  Future<dynamic> put(String isi_motivasi, String ids) async {
     Map<String, dynamic> data = {"isi_motivasi": isi_motivasi, "id": ids};
-    var response = await dio.put('$baseurl/aci/api/dev/PUTmotivasi',
+    var response = await dio.put('$baseurl/api/dev/PUTmotivasi/',
         data: data,
         options: Options(
           contentType: Headers.formUrlEncodedContentType,
@@ -30,6 +34,8 @@ class _EditPageState extends State<EditPage> {
     print("---> ${response.data} + ${response.statusCode}");
 
     return response.data;
+
+
   }
 
   TextEditingController isiMotivasiC = TextEditingController();
@@ -38,7 +44,7 @@ class _EditPageState extends State<EditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit"),
+        title: Text("Edit Motivasi"),
       ),
       body: SafeArea(
           child: Container(
@@ -66,14 +72,14 @@ class _EditPageState extends State<EditPage> {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      putPost(isiMotivasiC.text, widget.id.toString())
+                      put(isiMotivasiC.text, widget.id.toString())
                           .then((value) => {
                                 if (value != null)
                                   {
                                     Navigator.pop(context),
                                     Flushbar(
                                       message: "Berhasil Update & Refresh dlu",
-                                      duration: Duration(seconds: 5),
+                                      duration: Duration(seconds: 10),
                                       backgroundColor: Colors.green,
                                       flushbarPosition: FlushbarPosition.TOP,
                                     ).show(context)

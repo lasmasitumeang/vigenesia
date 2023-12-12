@@ -1,50 +1,57 @@
+
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:vigenesia/Constant/const.dart';
+import 'package:vigenesia/Screens/EditPage.dart';
 import 'Login.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:vigenesia/Models/Motivasi_Model.dart';
+
 
 class MainScreens extends StatefulWidget {
   final String? nama;
   final String? iduser;
 
-  const MainScreens({Key? key, this.nama, this.iduser}) : super(key: key);
+  const MainScreens({Key? key, this.nama,this.iduser
+  }) : super(key: key);
 
   @override
   _MainScreensState createState() => _MainScreensState();
 }
 
 class _MainScreensState extends State<MainScreens> {
-String baseurl = url;
+String baseurl = "http://localhost/vigenesia2/";
 
+
+String? id;
 var dio = Dio();
   TextEditingController titleController = TextEditingController();
 
-  Future<dynamic> sendMotivasi(String isi) async {
-    Map<String, dynamic> body = {
-      "isi_motivasi": isi,
-      "iduser": widget.iduser ?? '' //sudah ok
+  Future<dynamic> sendMotivasi(String Motivasi) async {
+    Map<String, dynamic> body = {"isi_motivasi": Motivasi,"iduser": widget.iduser //?? '' //sudah ok
       //"iduser": widget.iduser
     };
 
     try {
-      Response response = await dio.post("$baseurl/vigenesia/api/dev/POSTmotivasi/",
-          data: body,
+      final response= await dio.post("$baseurl/api/dev/POSTmotivasi/",data: body,
           options: Options(
-            contentType: Headers.formUrlEncodedContentType,
-            validateStatus: (status) => true,
-          ));
-      print("Respon -> ${response.data} + ${response.statusCode}");
+          contentType: Headers.formUrlEncodedContentType,
+        ),
+      );
+           
+          
       return response;
     } catch (e) {
       print("Error di -> $e");
     }
+    
   }
+List<MotivasiModel>listproduk=[];
 
   Future<List<MotivasiModel>> getData() async {
-    var response = await dio.get('$baseurl/vigenesia/api/Get_motivasi?iduser=$widget.iduser)');
+    var response = await dio.get('$baseurl/api/Get_motivasi');
 
     print(" ${response.data}");
     if (response.statusCode == 200) {
@@ -54,12 +61,26 @@ var dio = Dio();
       return listUsers;
     } else {
       throw Exception('Failed to load');
-    }
+    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
   }
+
+    Future<dynamic>deletePost(String id) async{
+      dynamic data={
+        "id":id,
+      };
+      var response = await dio.delete('$baseurl/api/dev/DELETEmotivasi',data: data,
+      options: Options(
+        contentType: Headers.formUrlEncodedContentType,
+        headers: {"Content-type":"application/json"}
+      ));
+      print("${response.data}");
+      var resbody=jsonDecode(response.data);
+      return resbody;
+    }
 
   Future<void> _getData() async {
     setState(() {
-      //getData();
+      _getData();
     });
   }
 
@@ -68,6 +89,7 @@ var dio = Dio();
   @override
   void initState() {
     super.initState();
+    getData();
     _getData();
   }
 
@@ -89,7 +111,7 @@ var dio = Dio();
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Hallo entry  ${widget.nama}",
+                        "Hallo  ${widget.nama}",
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w500,
@@ -136,13 +158,103 @@ var dio = Dio();
                                         flushbarPosition: FlushbarPosition.TOP,
                                       ).show(context)
                                     },
-                                  //_getData(),
+                                  _getData(),
                                   print("Sukses"),
                                 });
                       },
                       child: Text("Submit"),
                     ),
                   ),
+                  SizedBox(
+                      height: 40,
+                    ),
+                    TextButton(
+                      child: Icon(Icons.refresh),
+                      onPressed: () {
+                        _getData();
+                      },
+                    ),
+                    FutureBuilder(
+                        future: getData(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<MotivasiModel>> snapshot) {
+                          if (snapshot.hasData) {
+                            return Column(
+                              children: [
+                                for (var item in snapshot.data!)
+                                  Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: ListView(
+                                      shrinkWrap: true,
+                                      children: [Expanded(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(item.isiMotivasi.toString()),
+                                              Row(
+                                                children: [
+                                                  TextButton(
+                                                    child: Icon(Icons.settings),
+                                                    onPressed: () {
+                                                      String id;
+                                                      String isi_motivasi;
+                                                      
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (BuildContext
+                                                                    context) =>
+                                                                EditPage(
+                                                                    id: item.id,
+                                                                    isi_motivasi:
+                                                                        item.isiMotivasi),
+                                                          ));
+                                                    },
+                                                  ),
+                                                  TextButton(
+                                                    child: Icon(Icons.delete),
+                                                    onPressed: () {
+                                                      deletePost(item.id!)
+                                                          .then((value) => {
+                                                                if (value !=
+                                                                    null)
+                                                                  {
+                                                                    Flushbar(
+                                                                      message:
+                                                                          "Berhasil Delete",
+                                                                      duration: Duration(
+                                                                          seconds:
+                                                                              2),
+                                                                      backgroundColor:
+                                                                          const Color.fromARGB(255, 82, 220, 255),
+                                                                      flushbarPosition:
+                                                                          FlushbarPosition
+                                                                              .TOP,
+                                                                    ).show(
+                                                                        context)
+                                                                  }
+                                                              });
+                                                      _getData();
+                                                    },
+                                                  )
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            );
+                          } else if (snapshot.hasData &&
+                              snapshot.data!.isEmpty) {
+                            return Text("No Data");
+                          } else {
+                            return CircularProgressIndicator();
+                          }
+                        })
                 ],
               ),
             ),

@@ -14,9 +14,7 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   // Ganti Base URL
 
-  String baseurl =
-      url; // ganti dengan ip address kamu / tempat kamu menyimpan backend
-
+  String baseurl = "http://localhost/vigenesia2/";
   Future postRegister(
       String nama, String profesi, String email, String password) async {
     var dio = Dio();
@@ -29,7 +27,7 @@ class _RegisterState extends State<Register> {
     };
 
     try {
-      final response = await dio.post("$baseurl/api/registrasi/",
+      final response = await dio.post("$baseurl/api/registrasi",
           data: data,
           options: Options(headers: {'Content-type': 'application/json'}));
 
@@ -136,7 +134,7 @@ class _RegisterState extends State<Register> {
                                           message:
                                               "Check Your Field Before Register",
                                           duration: Duration(seconds: 5),
-                                          backgroundColor: Colors.redAccent,
+                                          backgroundColor: const Color.fromARGB(255, 82, 114, 255),
                                           flushbarPosition:
                                               FlushbarPosition.TOP,
                                         ).show(context)
